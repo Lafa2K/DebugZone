@@ -3,14 +3,17 @@
 ## Description
 
 **Debug Game Zones** "A script that visually displays game zones and their corresponding names by using boxes and blips on the minimap."
+**Custom minimap may cause issues displaying blips on the "Esc" map.**
 
 ## How to use
+
 Copy DebugZone to resources folder 
 add inside server.cfg: ensure DebugZone
 
 /DebugZone in chat
 
 tools folder is just to load popzone.txt (nothing special)
+
 ## Youtube
 
  CLICK TO OPEN
