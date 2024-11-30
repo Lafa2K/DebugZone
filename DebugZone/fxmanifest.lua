@@ -6,7 +6,6 @@ description ''
 version '1.0.0'
 
 client_scripts {
-'*.lua'
+    'client.lua',
+    'zonearea.lua'
 }
-
-
