@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Zone</title>
+    <style>
+        body {
+            background-color: rgb(22, 39, 70);
+            background-image: url(grid-black.png);
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            background-size: cover;
+            background-repeat: no-repeat;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            background-color: #5a5a5abe;
+            padding: 10px;
+            border: 1px solid #f4f4f467;
+            color: #ffffff;
+            max-height: 300px;
+            overflow-y: auto;
+            width: 80%;
+            max-width: 1280;
+        }
+
+        input[type="file"] {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #copyButton {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>LOAD ZONE</h1>
+
+    <input type="file" id="fileInput" />
+    <button onclick="processFile()">Process File</button>
+
+    <div id="output"></div>
+
+    <!-- Botão de copiar inicialmente oculto -->
+    <button id="copyButton" onclick="copyToClipboard()">copy To Clipboard</button>
+
+    <script>
+        function generateRandomColor() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return { r, g, b };
+        }
+
+        function rgbToHex(r, g, b) {
+            return (r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0')).toUpperCase();
+        }
+
+        function processFile() {
+            const fileInput = document.getElementById('fileInput');
+            const output = document.getElementById('output');
+            const copyButton = document.getElementById('copyButton');
+
+            if (fileInput.files.length === 0) {
+                alert("Por favor, selecione um arquivo.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (event) {
+                const content = event.target.result;
+                const lines = content.split('\n');
+                const zones = {};
+                const zoneColors = {};
+
+                lines.forEach(line => {
+                    line = line.trim();
+                    if (!line) return;
+
+                    const parts = line.split(',');
+                    if (parts.length < 8) return;
+
+                    const zoneName = parts[7].trim();
+                    const zoneId = parts[0].trim();
+                    const bbmin = `vector3(${parts[1].trim()}, ${parts[2].trim()}, ${parts[3].trim()})`;
+                    const bbmax = `vector3(${parts[4].trim()}, ${parts[5].trim()}, ${parts[6].trim()})`;
+
+                    if (!zones[zoneName]) {
+                        zones[zoneName] = [];
+                        zoneColors[zoneName] = generateRandomColor();
+                    }
+
+                    zones[zoneName].push({
+                        name: zoneId,
+                        bbmin: bbmin,
+                        bbmax: bbmax,
+                        zonename: zoneName
+                    });
+                });
+
+                let outputText = 'zoneid = {\n';
+                let first = true;
+                for (const zoneName in zones) {
+                    zones[zoneName].forEach(zone => {
+                        const color = zoneColors[zoneName];
+                        const hexColor = rgbToHex(color.r, color.g, color.b);
+                        if (!first) {
+                            outputText += ',\n';
+                        }
+                        outputText += `  {name = "${zone.name}", bbmin = ${zone.bbmin}, bbmax = ${zone.bbmax}, zonename = "${zone.zonename}", R = ${color.r}, G = ${color.g}, B = ${color.b}, Hex = "0x${hexColor}FF" }`;
+                        first = false;
+                    });
+                }
+                outputText += '\n}';
+
+                output.textContent = outputText;
+
+                // Mostrar o botão de copiar
+                copyButton.style.display = "block";
+            };
+
+            reader.readAsText(file);
+        }
+
+        function copyToClipboard() {
+            const output = document.getElementById('output');
+
+            navigator.clipboard.writeText(output.innerText).then(function () {
+                alert("Conteúdo copiado para a área de transferência!");
+            }).catch(function (err) {
+                console.error("Erro ao copiar o conteúdo: ", err);
+                alert("Não foi possível copiar o conteúdo.");
+            });
+        }
+    </script>
+</body>
+
+</html>
