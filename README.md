@@ -5,6 +5,7 @@
 **Debug Game Zones** "A script that visually displays game zones and their corresponding names by using boxes and blips on the minimap."
 
 ## How to use
+Copy DebugZone to resources folder 
 add inside server.cfg: ensure DebugZone
 
 /DebugZone in chat
