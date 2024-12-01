@@ -1317,3 +1317,4 @@ zoneid = {
     {name = "Legs3", bbmin = vector3(199.43, -1012.07, 0.0), bbmax = vector3(260.102, -877.913, 1250.0), zonename = "LegSqu", R = 253, G = 32, B = 121, Hex = "0xFD2079FF" },
     {name = "RedTRK", bbmin = vector3(786.266, 2026.25, 0.0), bbmax = vector3(1280.79, 2573.93, 1250.0), zonename = "RTRAK", R = 55, G = 224, B = 199, Hex = "0x37E0C7FF" }
   }
+  

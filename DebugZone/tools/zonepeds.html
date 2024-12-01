@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extrair Áreas e Ped List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #output, #uniqueOutput {
+            white-space: pre-wrap;
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+        button {
+            margin-top: 10px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Extrair Áreas e Ped List</h1>
+    <input type="file" id="fileInput" accept=".txt" />
+    <button onclick="processFile()">Processar Arquivo</button>
+    <h2>Output Formatado</h2>
+    <div id="output"></div>
+    <button onclick="copyToClipboard('output')">Copiar Formato GroupPeds</button>
+    
+    <h2>Lista de PEDs Única</h2>
+    <div id="uniqueOutput"></div>
+    <button onclick="copyToClipboard('uniqueOutput')">Copiar Lista Única</button>
+
+    <script>
+        function processFile() {
+            const fileInput = document.getElementById('fileInput');
+            const output = document.getElementById('output');
+            const uniqueOutput = document.getElementById('uniqueOutput');
+
+            if (!fileInput.files.length) {
+                alert('Por favor, selecione um arquivo.');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(e.target.result, "application/xml");
+
+                const areaItems = Array.from(xmlDoc.getElementsByTagName('Item')).filter(item =>
+                    item.querySelector('models > Item')
+                );
+
+                let groupPedsResult = '';
+                const uniquePeds = new Set();
+
+                for (let area of areaItems) {
+                    const areaName = area.querySelector('Name')?.textContent || 'Sem Nome';
+                    const pedList = Array.from(area.querySelectorAll('models > Item > Name'))
+                        .map(ped => ped.textContent);
+
+                    pedList.forEach(ped => uniquePeds.add(ped));
+
+                    groupPedsResult += `GroupPeds = {\n  areaname = "${areaName}",\n  pedlist = {\n    ${pedList.join(',\n    ')}\n  }\n},\n\n`;
+                }
+                output.textContent = groupPedsResult || 'Nenhuma área encontrada no arquivo.';
+                uniqueOutput.textContent = Array.from(uniquePeds).sort().join('\n') || 'Nenhum PED encontrado no arquivo.';
+            };
+
+            reader.onerror = function () {
+                alert('Erro ao ler o arquivo.');
+            };
+
+            reader.readAsText(file);
+        }
+
+        function copyToClipboard(elementId) {
+            const output = document.getElementById(elementId);
+
+            navigator.clipboard.writeText(output.innerText).then(function () {
+                alert("Conteúdo copiado para a área de transferência!");
+            }).catch(function (err) {
+                console.error("Erro ao copiar o conteúdo: ", err);
+                alert("Não foi possível copiar o conteúdo.");
+            });
+        }
+    </script>
+</body>
+</html>

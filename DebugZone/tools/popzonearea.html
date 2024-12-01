@@ -29,7 +29,7 @@
             margin-bottom: 20px;
         }
 
-        #output {
+        #output, #uniqueOutput {
             margin-top: 20px;
             white-space: pre-wrap;
             background-color: #5a5a5abe;
@@ -63,7 +63,7 @@
             background-color: #45a049;
         }
 
-        #copyButton {
+        #copyButton, #copyUniqueButton {
             display: none;
         }
     </style>
@@ -76,9 +76,10 @@
     <button onclick="processFile()">Process File</button>
 
     <div id="output"></div>
+    <button id="copyButton" onclick="copyToClipboard('output')">Copy Zone Data</button>
 
-    <!-- Botão de copiar inicialmente oculto -->
-    <button id="copyButton" onclick="copyToClipboard()">copy To Clipboard</button>
+    <div id="uniqueOutput"></div>
+    <button id="copyUniqueButton" onclick="copyToClipboard('uniqueOutput')">Copy Unique Zone Names</button>
 
     <script>
         function generateRandomColor() {
@@ -95,7 +96,9 @@
         function processFile() {
             const fileInput = document.getElementById('fileInput');
             const output = document.getElementById('output');
+            const uniqueOutput = document.getElementById('uniqueOutput');
             const copyButton = document.getElementById('copyButton');
+            const copyUniqueButton = document.getElementById('copyUniqueButton');
 
             if (fileInput.files.length === 0) {
                 alert("Por favor, selecione um arquivo.");
@@ -110,6 +113,7 @@
                 const lines = content.split('\n');
                 const zones = {};
                 const zoneColors = {};
+                const uniqueZoneNames = new Set();
 
                 lines.forEach(line => {
                     line = line.trim();
@@ -122,6 +126,8 @@
                     const zoneId = parts[0].trim();
                     const bbmin = `vector3(${parts[1].trim()}, ${parts[2].trim()}, ${parts[3].trim()})`;
                     const bbmax = `vector3(${parts[4].trim()}, ${parts[5].trim()}, ${parts[6].trim()})`;
+
+                    uniqueZoneNames.add(zoneName);
 
                     if (!zones[zoneName]) {
                         zones[zoneName] = [];
@@ -151,17 +157,20 @@
                 }
                 outputText += '\n}';
 
-                output.textContent = outputText;
+                const uniqueZoneNamesText = Array.from(uniqueZoneNames).sort().join('\n');
 
-                // Mostrar o botão de copiar
+                output.textContent = outputText;
+                uniqueOutput.textContent = uniqueZoneNamesText;
+
                 copyButton.style.display = "block";
+                copyUniqueButton.style.display = "block";
             };
 
             reader.readAsText(file);
         }
 
-        function copyToClipboard() {
-            const output = document.getElementById('output');
+        function copyToClipboard(elementId) {
+            const output = document.getElementById(elementId);
 
             navigator.clipboard.writeText(output.innerText).then(function () {
                 alert("Conteúdo copiado para a área de transferência!");
