@@ -6,7 +6,7 @@
 **Custom minimap may cause issues displaying blips on the "Esc" map.**
 
 ## LIVEWEB PREVIEW
-[![Visite o DebugZoneSite](https://lafa2k.github.io/DebugZoneSite/)](https://lafa2k.github.io/DebugZoneSite/assets/img/previewsite.png)
+[![Visite o DebugZoneSite](https://lafa2k.github.io/DebugZoneSite/)](https://raw.githubusercontent.com/lafa2k/DebugZoneSite/main/assets/images/previewsite.png)
 
 ## How to use - INGAME
 
