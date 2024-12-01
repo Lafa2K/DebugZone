@@ -5,7 +5,10 @@
 **Debug Game Zones** "A script that visually displays game zones and their corresponding names by using boxes and blips on the minimap."
 **Custom minimap may cause issues displaying blips on the "Esc" map.**
 
-## How to use
+## LIVEWEB PREVIEW
+[![Visite o DebugZoneSite](https://lafa2k.github.io/DebugZoneSite/)](https://lafa2k.github.io/DebugZoneSite/assets/img/previewsite.png)
+
+## How to use - INGAME
 
 Copy DebugZone to resources folder 
 add inside server.cfg: ensure DebugZone
@@ -27,3 +30,6 @@ tools folder is just html to extract content from popzone and zonepeds. (nothing
  CLICK TO OPEN
 
 [![YouTube video](https://img.youtube.com/vi/G3F0kD9_gCs/0.jpg)](https://youtu.be/G3F0kD9_gCs)
+
+
+
