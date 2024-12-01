@@ -10,12 +10,20 @@
 Copy DebugZone to resources folder 
 add inside server.cfg: ensure DebugZone
 
-/DebugZone in chat
+commands:
 
-tools folder is just to load popzone.txt (nothing special)
+**/DebugZone all** = show all zones
+
+**/DebugZone clear** = remove all zones
+
+**/DebugZone mylocation** = automatic update zones from my location
+
+**/DebugZone namezone** = show zone by name.  example: **/DebugZone pbox** = show pillbox zone:(use mylocation to get zonename or inside of client.lua table = areaNames have zone names too)
+
+tools folder is just html to extract content from popzone and zonepeds. (nothing special)
 
 ## Youtube
 
  CLICK TO OPEN
 
-[![YouTube video](https://img.youtube.com/vi/Y3XpzvW60h4/0.jpg)](https://youtu.be/Y3XpzvW60h4)
+[![YouTube video](https://img.youtube.com/vi/G3F0kD9_gCs/0.jpg)](https://youtu.be/G3F0kD9_gCs)
